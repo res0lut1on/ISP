@@ -1,14 +1,7 @@
 from __future__ import barry_as_FLUFL
 from cgitb import strong
 from collections import Counter
-from statistics import median
-from tracemalloc import start
 
-def mainMed():
-    with open("input.txt") as f:
-        print(median([len(sentence.split()) for sentence in f.read().split(".")]))
- 
-#if __name__ == "__main__":
 def amountNull(stroka):
     def checkLiteral(letter):
         if(97 <= ord(letter) <= 122 or 65 <= ord(letter) <=90):
@@ -90,7 +83,6 @@ def amountDict3(str):
 
 text = 'ti pidoras 1, a ti, ne ya? ya.'
 text1 = 'В этом примере Python мы прочитаем текстовый файл с несколькими строками и подсчитаете количество слов в нем. Рассмотрим следующий текстовый файл.'
-str = text1.split_text([text[1]])
 
 #print(type(words))
 #print(len(words))
