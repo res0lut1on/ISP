@@ -2,26 +2,6 @@ from __future__ import barry_as_FLUFL
 from cgitb import strong
 from collections import Counter
 
-def amountNull(stroka):
-    def checkLiteral(letter):
-        if(97 <= ord(letter) <= 122 or 65 <= ord(letter) <=90):
-            return 1
-        return 0
-    wordsCollection = stroka.split()
-    for item in wordsCollection:
-        amount = 0
-        CheckingWord = ""
-        for i in len(stroka):
-            if(checkLiteral(stroka[i])):
-                CheckingWord+=stroka[i]
-            else:
-                if(CheckingWord == item):
-                    amount+=1
-
-
-        print(f"{item} — {stroka.count(item)}")
-    print()
-
 def deleteLastSymbolIfHeNotALetter(letter):
     if(97 <= ord(letter[-1]) <= 122 or 65 <= ord(letter[-1]) <=90):
         return letter
