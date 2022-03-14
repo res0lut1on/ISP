@@ -61,6 +61,23 @@ def amountDict3(str):
     c = text.count('.')
     print(len(l)/c)
 
+def amountDict4(str, n):
+    text = str.split()
+    for i in range(len(text)):
+        text[i] = deleteLastSymbolIfHeNotALetter(text[i])
+    i = 0
+    dictNgram = dict()
+    while text != "":
+        if(n <= len(text[i])):
+            for startingIndex in range(len(text[i]) - n):
+                str = ""
+                for j in range(startingIndex, startingIndex + n):
+                    str+=text[i][j]
+                dictNgram[str] = 0
+            print(str)
+        break
+    
+amountDict4("abcdefgh", 3)
 text = 'ti pidoras 1, a ti, ne ya? ya.'
 text1 = 'В этом примере Python мы прочитаем текстовый файл с несколькими строками и подсчитаете количество слов в нем. Рассмотрим следующий текстовый файл.'
 
