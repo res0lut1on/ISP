@@ -1,6 +1,7 @@
 from __future__ import barry_as_FLUFL
 from cgitb import strong
 from collections import Counter
+from re import S
 
 def deleteLastSymbolIfHeNotALetter(letter):
     if(97 <= ord(letter[-1]) <= 122 or 65 <= ord(letter[-1]) <=90):
@@ -61,23 +62,38 @@ def amountDict3(str):
     c = text.count('.')
     print(len(l)/c)
 
-def amountDict4(str, n):
+def checkDict(dictNgram, str):
+    for item in dictNgram:
+        if(item == str):
+            return False
+    return True
+
+
+def amountDict4(str, n, k):
     text = str.split()
+    saveString = str.split()
     for i in range(len(text)):
         text[i] = deleteLastSymbolIfHeNotALetter(text[i])
     i = 0
     dictNgram = dict()
-    while text != "":
+    while text != []:
         if(n <= len(text[i])):
-            for startingIndex in range(len(text[i]) - n):
+            for startingIndex in range(len(text[i]) + 1 - n):
                 str = ""
                 for j in range(startingIndex, startingIndex + n):
                     str+=text[i][j]
-                dictNgram[str] = 0
-            print(str)
-        break
+                if(checkDict(dictNgram, str)):
+                    dictNgram[str] = 1
+                else:
+                    dictNgram[str]+=1          
+        text.remove(text[i])
+    list_d = sorted(dictNgram.values())
+    sorted(dictNgram.values())
+    print(list_d)
+
+
     
-amountDict4("abcdefgh", 3)
+amountDict4("abcde abcdecdedr", 3, 10)
 text = 'ti pidoras 1, a ti, ne ya? ya.'
 text1 = 'В этом примере Python мы прочитаем текстовый файл с несколькими строками и подсчитаете количество слов в нем. Рассмотрим следующий текстовый файл.'
 
