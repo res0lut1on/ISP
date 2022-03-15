@@ -1,3 +1,4 @@
+
 def deleteLastSymbolIfHeNotALetter(letter):
     if(97 <= ord(letter[-1]) <= 122 or 65 <= ord(letter[-1]) <=90):
         return letter
@@ -57,12 +58,15 @@ def amountDict3(str):
             newSentence+=" "
     except:
         print(f"Total sentence  — {amountSentence+1}")
-    if(amountSentence % 2 == 0):
-        answer = (amountDict2(sentenceDict[amountSentence/2], 0) + amountDict2(sentenceDict[amountSentence/2 + 1], 0))/2
-        print(f"{answer}")
-    else:
-        answer = (amountDict2(sentenceDict[(amountSentence + 1)/2], 0))
-        print(f"{answer}")
+    try:
+        if(amountSentence % 2 == 0):
+            answer = (amountDict2(sentenceDict[amountSentence/2], 0) + amountDict2(sentenceDict[amountSentence/2 + 1], 0))/2
+            print(f"{answer}")
+        else:
+            answer = (amountDict2(sentenceDict[(amountSentence + 1)/2], 0))
+            print(f"{answer}")
+    except:
+        print("0")
 
 def amountDict4(str, n, k):
     text = str.split()
@@ -116,14 +120,24 @@ def main_():
                     She walked around the car 2 times, 
                     approached the ajar window and asked 
                     Are you blue Vitalik?'''
-    n = 3
-    k = 10
-    amountDict(text2)
+    command = input("Empty?, Text, Spam, Small text ")
+    n = int(input("n for Ngram, n = ")) 
+    k = int(input("k for Top, k = "))
+    match command.split():
+        case["1"]:
+            finalChoice = ""
+        case["2"]:
+            finalChoice = text2
+        case["3"]:
+            finalChoice = text1
+        case["4"]:
+            finalChoice = text
+    amountDict(finalChoice)
     print()
-    amountDict2(text2, 1)
+    amountDict2(finalChoice, 1)
     print()
-    amountDict3(text2)
+    amountDict3(finalChoice)
     print()
-    amountDict4(text2, n, k)
+    amountDict4(finalChoice, n, k)
 
 main_()
