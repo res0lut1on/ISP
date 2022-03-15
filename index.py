@@ -127,6 +127,3 @@ def main_():
     amountDict4(text2, n, k)
 
 main_()
-#print(type(words))
-#print(len(words))
-
