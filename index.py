@@ -1,34 +1,13 @@
-from __future__ import barry_as_FLUFL
-from cgitb import strong
-from collections import Counter
-from re import S
-
 def deleteLastSymbolIfHeNotALetter(letter):
     if(97 <= ord(letter[-1]) <= 122 or 65 <= ord(letter[-1]) <=90):
         return letter
     return letter[:-1]
 
-def checkEqual(listik, word):
-    for wordInList in listik:
-        if(wordInList == word):
-            return True
-    return False
-
-def amount(str):
-    text = str.split()
-    for i in range(len(text)):
-        text[i] = deleteLastSymbolIfHeNotALetter(text[i])
-        print(text[i])
-    print()
-    listCheck = []
-    for wordInText in text:
-        counter = 0
-        if(checkEqual(listCheck, wordInText) == False):
-            for item in text:
-                if(item == wordInText):
-                    counter+=1
-            print(f"{wordInText} — {counter}")
-            listCheck.append(wordInText) 
+def checkDict(dictNgram, str):
+    for item in dictNgram:
+        if(item == str):
+            return False
+    return True
 
 def amountDict(str):
     text = str.split()
@@ -37,6 +16,7 @@ def amountDict(str):
     dictText = dict()
     for i in range(len(text)):
         dictText[text[i]] = 0
+    print(" How many times rpt word:")
     for wordInText in text:
         if(dictText[wordInText] == 0):
             for item in text:
@@ -44,7 +24,7 @@ def amountDict(str):
                     dictText[wordInText]+=1
             print(f"{wordInText} — {dictText[wordInText]}")
 
-def amountDict2(str):
+def amountDict2(str, k):
     text = str.split()
     i = 0
     amountSentence = 0
@@ -54,28 +34,43 @@ def amountDict2(str):
                 amountSentence+=1
             i+=1
     except:
-        print(len(text)/amountSentence)
+        if( k == 1):
+            print(f"Average number of words in a sentence — {len(text)/(amountSentence+1)}")
+        else:
+            answer = len(text)/(amountSentence)
+            return answer #+1 
 
 def amountDict3(str):
-    text = str.replace('?', '.').replace('!', '.').replace('...', '.')
-    l = text.split(' ')
-    c = text.count('.')
-    print(len(l)/c)
-
-def checkDict(dictNgram, str):
-    for item in dictNgram:
-        if(item == str):
-            return False
-    return True
-
+    text = str.split()
+    i = 0
+    sentenceDict = dict()
+    newSentence = ""
+    amountSentence = 0
+    try:
+        while i >= 0:
+            newSentence+= text[i]
+            if(text[i][-1] == '.' or text[i][-1] == '?' or text[i][-1] == '!' or text[i][-1] == ';'):
+                amountSentence+=1
+                sentenceDict[amountSentence] = newSentence
+                newSentence =""
+            i+=1
+            newSentence+=" "
+    except:
+        print(f"Total sentence  — {amountSentence+1}")
+    if(amountSentence % 2 == 0):
+        answer = (amountDict2(sentenceDict[amountSentence/2], 0) + amountDict2(sentenceDict[amountSentence/2 + 1], 0))/2
+        print(f"{answer}")
+    else:
+        answer = (amountDict2(sentenceDict[(amountSentence + 1)/2], 0))
+        print(f"{answer}")
 
 def amountDict4(str, n, k):
     text = str.split()
     saveString = str.split()
     for i in range(len(text)):
         text[i] = deleteLastSymbolIfHeNotALetter(text[i])
-    i = 0
     dictNgram = dict()
+    i = 0
     while text != []:
         if(n <= len(text[i])):
             for startingIndex in range(len(text[i]) + 1 - n):
@@ -87,16 +82,51 @@ def amountDict4(str, n, k):
                 else:
                     dictNgram[str]+=1          
         text.remove(text[i])
+    for item in dictNgram:
+        text.append(item)
     list_d = sorted(dictNgram.values())
-    sorted(dictNgram.values())
-    print(list_d)
-
-
+    sortDictNgram = dict()
+    for i in range(-1, -len(list_d), -1):
+        beginNewIteration = 0
+        while beginNewIteration != dictNgram[text[-1]]:
+            beginNewIteration = 0
+            for item  in range(beginNewIteration, len(text), 1):
+                if(list_d[i] == dictNgram[text[item]]):
+                    sortDictNgram[text[item]] = list_d[i]
+                    beginNewIteration = dictNgram[text[item]]
+                    del dictNgram[text[item]]
+                    text.remove(text[item])
+                    break
+                beginNewIteration = dictNgram[text[item]]
+    init = 0
+    print(f"Top {k} most poplura Ngrm... ")
+    for i in sortDictNgram:
+        if(init >= k):
+            break
+        print(f"{sortDictNgram[i]} — {i}")
+        init+=1
     
-amountDict4("abcde abcdecdedr", 3, 10)
-text = 'ti pidoras 1, a ti, ne ya? ya.'
-text1 = 'В этом примере Python мы прочитаем текстовый файл с несколькими строками и подсчитаете количество слов в нем. Рассмотрим следующий текстовый файл.'
+def main_():
+    text = 'Сan also be used for sequences of words or almost any type of data. For example, they have been used for extracting features. for clustering large sets of satellite earth images? and for determining what part of the Earth. a particular image came from.'
+    text1 = "Fuck fuck. Fuck fuck fuck fuck fuck. Fuck."
+    text2 =  '''Taxi dispatcher to the client: Get out in 5 minutes. 
+                    Mazda is waiting for you, metallic blue. 
+                    Further, according to the driver: 
+                    A woman comes out of the entrance. 
+                    She walked around the car 2 times, 
+                    approached the ajar window and asked 
+                    Are you blue Vitalik?'''
+    n = 3
+    k = 10
+    amountDict(text2)
+    print()
+    amountDict2(text2, 1)
+    print()
+    amountDict3(text2)
+    print()
+    amountDict4(text2, n, k)
 
+main_()
 #print(type(words))
 #print(len(words))
 
