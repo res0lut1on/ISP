@@ -1,6 +1,8 @@
 
+
 def deleteLastSymbolIfHeNotALetter(letter):
-    if(97 <= ord(letter[-1]) <= 122 or 65 <= ord(letter[-1]) <=90):
+    if(97 <= ord(letter[-1]) <= 122 or 
+            65 <= ord(letter[-1]) <= 90):
         return letter
     return letter[:-1]
 
@@ -17,12 +19,13 @@ def amountDict(str):
     dictText = dict()
     for i in range(len(text)):
         dictText[text[i]] = 0
+        
     print(" How many times rpt word:")
     for wordInText in text:
         if(dictText[wordInText] == 0):
             for item in text:
                 if(item == wordInText):
-                    dictText[wordInText]+=1
+                    dictText[wordInText] += 1
             print(f"{wordInText} — {dictText[wordInText]}")
 
 def amountDict2(str, k):
@@ -31,7 +34,10 @@ def amountDict2(str, k):
     amountSentence = 0
     try:
         while i >= 0:
-            if(text[i][-1] == '.' or text[i][-1] == '?' or text[i][-1] == '!' or text[i][-1] == ';'):
+            if(text[i][-1] == '.' or 
+                    text[i][-1] == '?' or 
+                    text[i][-1] == '!' or 
+                    text[i][-1] == ';'):
                 amountSentence+=1
             i+=1
     except:
@@ -50,17 +56,21 @@ def amountDict3(str):
     try:
         while i >= 0:
             newSentence+= text[i]
-            if(text[i][-1] == '.' or text[i][-1] == '?' or text[i][-1] == '!' or text[i][-1] == ';'):
-                amountSentence+=1
+            if(text[i][-1] == '.' or 
+                    text[i][-1] == '?' or
+                    text[i][-1] == '!' or 
+                    text[i][-1] == ';'):
+                amountSentence += 1
                 sentenceDict[amountSentence] = newSentence
                 newSentence =""
             i+=1
             newSentence+=" "
     except:
-        print(f"Total sentence  — {amountSentence+1}")
+        print(f"Total sentence  — {amountSentence + 1}")
+
     try:
         if(amountSentence % 2 == 0):
-            answer = (amountDict2(sentenceDict[amountSentence/2], 0) + amountDict2(sentenceDict[amountSentence/2 + 1], 0))/2
+            answer = (amountDict2(sentenceDict[amountSentence / 2], 0) + amountDict2(sentenceDict[amountSentence/2 + 1], 0))/2
             print(f"{answer}")
         else:
             answer = (amountDict2(sentenceDict[(amountSentence + 1)/2], 0))
@@ -73,6 +83,7 @@ def amountDict4(str, n, k):
     saveString = str.split()
     for i in range(len(text)):
         text[i] = deleteLastSymbolIfHeNotALetter(text[i])
+        
     dictNgram = dict()
     i = 0
     while text != []:
@@ -84,10 +95,11 @@ def amountDict4(str, n, k):
                 if(checkDict(dictNgram, str)):
                     dictNgram[str] = 1
                 else:
-                    dictNgram[str]+=1          
+                    dictNgram[str] += 1          
         text.remove(text[i])
     for item in dictNgram:
         text.append(item)
+
     list_d = sorted(dictNgram.values())
     sortDictNgram = dict()
     for i in range(-1, -len(list_d), -1):
@@ -102,6 +114,7 @@ def amountDict4(str, n, k):
                     text.remove(text[item])
                     break
                 beginNewIteration = dictNgram[text[item]]
+
     init = 0
     print(f"Top {k} most poplura Ngrm... ")
     for i in sortDictNgram:
@@ -111,9 +124,13 @@ def amountDict4(str, n, k):
         init+=1
     
 def main_():
-    text = 'Сan also be used for sequences of words or almost any type of data. For example, they have been used for extracting features. for clustering large sets of satellite earth images? and for determining what part of the Earth. a particular image came from.'
+    text = '''Сan also be used for sequences of words or almost any type of data. 
+              For example, they have been used for extracting features. 
+              for clustering large sets of satellite earth images? 
+              and for determining what part of the Earth. 
+              a particular image came from.'''
     text1 = "Fuck fuck. Fuck fuck fuck fuck fuck. Fuck."
-    text2 =  '''Taxi dispatcher to the client: Get out in 5 minutes. 
+    text2 = '''Taxi dispatcher to the client: Get out in 5 minutes. 
                     Mazda is waiting for you, metallic blue. 
                     Further, according to the driver: 
                     A woman comes out of the entrance. 
@@ -121,8 +138,10 @@ def main_():
                     approached the ajar window and asked 
                     Are you blue Vitalik?'''
     command = input("Empty?, Text, Spam, Small text ")
+    
     n = int(input("n for Ngram, n = ")) 
     k = int(input("k for Top, k = "))
+    finalChoice = ""
     match command.split():
         case["1"]:
             finalChoice = ""
