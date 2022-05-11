@@ -54,7 +54,7 @@ def serialize(item) -> any:
         return {"type": {"name": item.__name__, "attribs": attribs_dict}}
 
     if (getmodule(type(item)).__name__ in sys.builtin_module_names or
-        getmodule(type(item)).__name__ == 'importlib._bootstrap' or
+            getmodule(type(item)).__name__ == 'importlib._bootstrap' or
             getmodule(type(item)).__name__ == '_sitebuiltins'):
         return None
 
@@ -69,8 +69,89 @@ def deserialize(item: dict[str, any]) -> any:
         return item
 
     for (key, value) in item.items():
-        if key =='tuple':
+        if key == 'tuple':
             if value is None:
                 return ()
             return tuple(deserialize(element) for element in value.values())
+        if key == 'list':
+            return [deserialize(element) for element in value.values()]
+        if key == 'dict':
+            return value
+        if key == 'bytes':
+            return bytes.fromhex(value)
+        if isinstance(value, int | float | str):
+            return value
 
+        if key == 'type':
+            globals().update(__main__.__dict__)
+
+            obj_type = getattr(__main__, value['name'], None)
+            serialized = serialize(obj_type)
+
+            if (serialized is None
+                    or isinstance(serialized, dict)
+                    and serialized['type'] != value):
+                attribs = value['attribs']
+                for i in attribs.keys():
+                    attribs[i] = deserialize(attribs[i])
+
+                obj_type = type(
+                    value['name'],
+                    (object,),
+                    attribs
+                )
+
+            return obj_type
+
+        if key == 'func':
+            f_code = deserialize(value)
+
+            def func():
+                pass
+
+            func.__code__ = f_code
+            return func
+
+        if key == 'code':
+            code_names = deserialize(value["co_names"])
+
+            for name in code_names:
+                if builtins.__dict__.get(name, 42) == 42:
+                    try:
+                        builtins.__dict__[name] = importlib.import_module(name)
+                    except ModuleNotFoundError:
+                        builtins.__dict__[name] = 42
+
+            return types.CodeType(
+                deserialize(value["co_argcount"]),
+                deserialize(value["co_posonlyargcount"]),
+                deserialize(value["co_kwonlyargcount"]),
+                deserialize(value["co_nlocals"]),
+                deserialize(value["co_stacksize"]),
+                deserialize(value["co_flags"]),
+                deserialize(value["co_code"]),
+                deserialize(value["co_consts"]),
+                code_names,
+                deserialize(value["co_varnames"]),
+                "deserialized",  # ?????????????????????????????????????????????????????????????????
+                deserialize(value["co_name"]),
+                deserialize(value["co_firstlineno"]),
+                deserialize(value["co_lnotab"]),
+                deserialize(value["co_freevars"]),
+                deserialize(value["co_cellvars"])
+            )
+
+        if key == 'object':
+            obj_type = deserialize(value['obj_type'])
+            obj_dict = deserialize(value['obj_dict'])
+
+            try:
+                obj = object.__new__(obj_type)
+                obj.__dict__ = obj_dict
+                for (obj_key, obj_value) in obj_dict.items():
+                    setattr(obj, obj_key, obj_value)
+            except TypeError:
+                obj = None
+            return obj
+
+    return None
