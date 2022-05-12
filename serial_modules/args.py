@@ -1,7 +1,9 @@
 import argparse
 
+
 class ArgParser:
     """Varbl from cmd line arg"""
+
     @staticmethod
     def get_parser():
         parser = argparse.ArgumentParser(description="Great Description To Be Here")
