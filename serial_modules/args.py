@@ -14,7 +14,7 @@ class ArgParser:
                             help='load obj from files')
         parser.add_argument('d', '--dump',
                             dest='dump', nargs='+',
-                            metavar='filename:object:filetype',
+                            metavar='filename.py:object:filetype',
                             help='dump obj from files')
         parser.add_argument('c', '--convert',
                             dest='convert', nargs='+',
