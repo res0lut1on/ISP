@@ -1,0 +1,102 @@
+import sys
+import code
+import importlib
+from serial_modules.args import ArgParser
+from serializers.serializer_factory import (
+    SerializerFabric,
+    XmlSerializerFabric,
+    JsonSerializerFabric,
+    YamlSerializerFabric,
+    TomlSerializerFabric
+)
+
+item_dump, item_load, item_convert = ArgParser.get_args()
+
+
+def get_fabric(filename: str) -> SerializerFabric | None:
+    """Return fabric by filetype"""
+    filetype = filename.lower().split('.')[-1]
+    fabrics = {
+        'json': JsonSerializerFabric,
+        'toml': TomlSerializerFabric,
+        'yaml': YamlSerializerFabric,
+        'xml': XmlSerializerFabric
+    }
+    return fabrics.get(filetype, None)
+
+
+def load(filename: str) -> any:
+    """Load obj from file"""
+    fabric = get_fabric(filename)
+    if fabric is None:
+        return None
+    serializer = fabric.create_serializer()
+    item = serializer.load(filename)
+    return item
+
+
+def dump_objects(input_strings):
+    """Dump obj from strings"""
+
+    def get_object(filename: str, obj_name):
+        module_name = filename.removesuffix('.py').split('/')[-1]
+        module_path = filename.removesuffix(f'{module_name}.py')
+        sys.path.append(module_path)
+
+        sys.stdout = None
+        mod = importlib.import_module(module_name)
+        sys.stdout = sys.__stdout__
+
+        item = mod.__dict__[obj_name]
+
+        return item
+
+
+def load_files(files_to_load):
+    """load obj from file"""
+
+    for filename in files_to_load:
+        obj_name = filename.split('.')[-2]
+        try:
+            locals().update({obj_name: load(filename)})
+            print(f'{obj_name} loaded from {filename}')
+        except FileNotFoundError:
+            print(f'Error when loading {filename}: No such file')
+
+    code.interact(local=locals(),
+                  banner='Starting interactive', exitmsg='')
+
+
+def convert_files(files_to_convert: list[str]) -> None:
+    """Convert any files"""
+
+    def convert(filename: str, filetype: str):
+        item = load(filename)
+        name = filename.split('.')[0]
+        out_serializer = get_fabric(filetype).create_serializer()
+        out_serializer.dump(item, f'{name}.{filetype}')
+        print(f"{filename} converted to {name}.{filetype}")
+
+    filetypes = list(
+        filter(lambda file: file.find('.') == -1, files_to_convert))
+    start = 0
+    end = 0
+
+    for filetype in filetypes:
+        end = files_to_convert.index(filetype, start)
+        for i in range(start, end):
+            convert(files_to_convert[i], filetype)
+        start = end + 1
+
+
+if item_dump is not None:
+    dump_objects(item_dump)
+
+if item_convert is not None:
+    convert_files(item_convert)
+
+if item_load is not None:
+    load_files(item_load)
+
+if item_load and item_convert and item_dump is None:
+    ArgParser.print_help()
