@@ -2,7 +2,12 @@ from django.shortcuts import HttpResponse,render
 from django.shortcuts import render
 
 # Create your views here.
+from rest_framework import viewsets
+
+from .models import Article
+from .serializers import ArticleSerializer
 
 
-def Index(request):
-    return HttpResponse(":))")
+class ArticleViewSet(viewsets.ModelViewSet):
+    serializer_class = ArticleSerializer
+    queryset = Article.objects.all()

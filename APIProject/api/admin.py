@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, Genre, Article,Language
+from .models import Author, Genre, Article, Language
 
 
 admin.site.register(Genre)
@@ -16,3 +16,10 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'date_of_birth', 'date_of_death')
     fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
     inlines = [ArticleInline]
+
+
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'description')
+
+
+admin.site.register(Article, ArticleAdmin)
