@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Genre(models.Model):
-
     name = models.CharField(max_length=200, help_text="Enter your book genre pidor!")
 
     def __str__(self):
@@ -21,7 +20,6 @@ class Article(models.Model):
 
 
 class Author(models.Model):
-
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
