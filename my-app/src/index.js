@@ -11,7 +11,6 @@ function Router(){
   return(
       <BrowserRouter>
         <Routes>
-          <Route exact path = "/" element = {<Login/>}></Route> //component 
           <Route exact path = "/articles" element = {<App/>}></Route>
         </Routes>
       </BrowserRouter>
