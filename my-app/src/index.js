@@ -11,7 +11,7 @@ function Router(){
   return(
       <BrowserRouter>
         <Routes>
-          <Route exact path = "/articles" element = {<App/>}></Route>
+          <Route exact path = "/" element = {<App/>}></Route>
         </Routes>
       </BrowserRouter>
   )
@@ -21,7 +21,7 @@ function Router(){
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Router></Router>
+    <App></App>
   </React.StrictMode>
 );
 

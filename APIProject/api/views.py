@@ -3,11 +3,12 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets, generics, permissions, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Article, Author
-from .serializers import ArticleSerializer, AuthorSerializer
+from .serializers import *
 
 
 class Logout(APIView):
@@ -20,10 +21,18 @@ class Logout(APIView):
 class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+   # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
     serializer_class = AuthorSerializer
     queryset = Author.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class GenreViewSet(viewsets.ModelViewSet):
+    serializer_class = GenreSerializer
+    queryset = Genre.objects.all()
+
+
+   # permission_classes = [permissions.IsAuthenticatedOrReadOnly]

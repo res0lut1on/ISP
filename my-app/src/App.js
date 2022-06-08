@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import {useState, useEffect} from 'react'
 import ArticleList from './components/ArticleList';
-
+import Form from './components/Form';
 
 function App() {
 
@@ -23,6 +23,41 @@ function App() {
 
   }, [])
 
+  const editBtn = (article) => {
+    setEditArticle(article)
+  }
+
+  const updatedInformation = (article) => {
+    const new_article = articles.map(myarticle => {
+      if(myarticle.id === article.id){
+        return article;
+      }
+      else {
+        return myarticle;
+      }
+    })
+    setArticles(new_article)
+  }     //n   
+
+  const articleForm = () => {
+    setEditArticle({title:'', description:''})
+  }
+
+  const insertedInformation = (article) => {
+    const new_articles = [...articles, article]
+    setArticles(new_articles)
+  }
+
+  const deleteBtn = (article) => {
+    const new_articles = articles.filter(myarticle => {
+      if(myarticle.id === article.id){
+        return false
+      }
+      return true;
+    })
+    setArticles(new_articles)
+  }
+
   return (
     <div className="App">
         <div className='row'>
@@ -33,7 +68,9 @@ function App() {
           <div className='col'>
           </div>
         </div>
-        <ArticleList articles={articles}/>
+        <ArticleList articles={articles} editBtn = {editBtn} deleteBtn = {deleteBtn }/>
+        {editArticle ? <Form article = {editArticle} updatedInformation = {updatedInformation} insertedInformation = {insertedInformation}></Form> : null}
+      
     </div>
   );
 }

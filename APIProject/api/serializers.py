@@ -5,26 +5,25 @@ from rest_framework.authtoken.views import Token
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    articles = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Author
-        fields = ['first_name', 'last_name']
+        fields = ['first_name', 'last_name', 'articles']
 
 
 class GenreSerializer(serializers.ModelSerializer):
-    article_list = serializers.StringRelatedField(many=True)
-
     class Meta:
         model = Genre
-        fields = ['name']
+        fields = ['name', ]
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    genre = serializers.StringRelatedField(many=True)
-    author = AuthorSerializer()
+    genre = serializers.PrimaryKeyRelatedField(queryset=Genre.objects.all(), many=True)
 
     class Meta:
         model = Article
-        fields = ['id', 'title', 'description', 'genre', 'author']
+        fields = ['id', 'title', 'description', 'genre', 'author', 'language']
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -11,8 +11,8 @@ class Genre(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
-    genre = models.ManyToManyField(Genre, help_text="Select a genre for this book")
+    author = models.ForeignKey('Author', related_name='articles', on_delete=models.SET_NULL, null=True)
+    genre = models.ManyToManyField(Genre, related_name='genre', help_text="Select a genre for this book")
     language = models.ForeignKey('Language', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
