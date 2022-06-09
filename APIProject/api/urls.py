@@ -6,7 +6,7 @@ from django.views.generic import RedirectView
 
 router = DefaultRouter()
 router.register('articles', ArticleViewSet, basename='articles')
-router.register('', ArticleViewSet, basename='articles')
+#router.register('', ArticleViewSet, basename='articles')
 router.register('author', AuthorViewSet, basename='author')
 router.register('genre', GenreViewSet, basename='genre')
 

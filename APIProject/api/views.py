@@ -6,10 +6,12 @@ from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import aiohttp
 
+from .async_requests import get_article_by_genre
 from .models import Article, Author
 from .serializers import *
-
+import asyncio
 logger = logging.getLogger(__name__)
 
 logging.config.dictConfig({
@@ -43,6 +45,7 @@ logging.config.dictConfig({
     }
 })
 
+
 class Logout(APIView):
 
     def get(self, request, format=None):
@@ -56,7 +59,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
     filter_fileds = ['language']
     logger.info('strart Article view..')
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_queryset_genre(self):
+        coroutine = get_article_by_genre(self.kwargs['genre'])
+        return asyncio.run(coroutine)
+    #permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
@@ -70,4 +76,5 @@ class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all().order_by('name')
     logger.info('strart Genre view..')
 
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
+

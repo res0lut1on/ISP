@@ -102,6 +102,9 @@ class TodoModelTest(TestCase):
             print(f"---{post.pk}---")
         self.assertEqual(response.status_code, 405)
 
+   # def test_async(self):
+     #   print(self.article.get_article_by_genre())
+
     #delete
     def test_delete_article_view(self):
         response = self.client.delete(reverse('articles-detail', args='1'))
